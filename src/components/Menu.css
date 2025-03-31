@@ -1,15 +1,12 @@
 .layout-container {
     display: flex;
     flex-direction: column; 
-    /* Default to column for small screens */
   }
   
   .header {
     display: flex;
     flex-direction: column;
-    /* background-color: #f0f0f0; */
     padding: 16px;
-    /* align-items: center; */
   }
   
   .header-title {
@@ -19,37 +16,25 @@
   
   .header-nav {
     display: flex;
-    overflow-x: auto; /* Horizontal scrolling */
+    overflow-x: auto; 
+    gap: 16px;
   }
   
-  .header-link {
-    margin-right: 16px;
-    color: #007bff; /* Blue color */
+  .header-item {
+    cursor: pointer;
+    padding: 8px;      
   }
-  
-  /* Navigation for large screens */
-  .navbar {
-    display: none; /* Hidden by default */
-  }
-  
-  .navbar-title {
+
+  .header-item.active {
+    border-bottom: 2px solid #5A189A; 
+    color: #5A189A; 
     font-weight: bold;
-    margin-bottom: 8px;
   }
   
-  .navbar-list {
-    list-style: none;
-    padding: 0;
+  .navbar {
+    display: none;
   }
-  
-  .navbar-item {
-    margin-bottom: 8px;
-  }
-  
-  .navbar-link {
-    color: #007bff; /* Blue color */
-  }
-  
+    
   /* Items display */
   .items-display {
     padding: 16px;
@@ -81,17 +66,38 @@
     }
   
     .header {
-      display: none; /* Hide header on large screens */
+      display: none; 
     }
   
     .navbar {
       display: none; /* Hidden by default */
       width: 400px; /* Fixed width for the navbar */
-      /* background-color: #706969; Optional: Set background color */
       padding: 32px; /* Optional: Add padding */
       display: flex;
       flex-direction: column;
       height: 100vh;
+    }
+
+    .navbar-title {
+      font-weight: bold;
+      margin-bottom: 8px;
+    }
+    
+    .navbar-list {
+      list-style: none;
+      padding: 0;
+    }
+    
+    .navbar-item {
+      cursor: pointer;
+      border-left: 2px solid lightgray;
+      padding: 8px;      
+    }
+
+    .navbar-item.active {
+      border-left: 2px solid #5A189A; 
+      color: #5A189A; 
+      font-weight: bold;
     }
   
     .items-display {

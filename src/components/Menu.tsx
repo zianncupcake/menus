@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './Menu.css';
 
 interface Section {
@@ -21,6 +21,7 @@ interface MenuProps {
 }
 
 const Menu: React.FC<MenuProps> = ({ sections }) => {
+    const [activeSection, setActiveSection] = useState<string | null>(null);
     return (
         <div className="layout-container">
             {/* Header for Small Screens */}
@@ -28,9 +29,9 @@ const Menu: React.FC<MenuProps> = ({ sections }) => {
                 <h2 className="header-title">Our Menu</h2>
                 <nav className="header-nav">
                     {sections.map((section) => (
-                        <a key={section.id} href={`#${section.id}`} className="header-link">
+                        <div key={section.id} className={`header-item ${activeSection === section.id ? 'active' : ''}`} onClick={() => setActiveSection(section.id)}>
                             {section.label}
-                        </a>
+                        </div>
                     ))}
                 </nav>
             </header>
@@ -40,10 +41,8 @@ const Menu: React.FC<MenuProps> = ({ sections }) => {
                 <h2 className="navbar-title">Our Menuuuu</h2>
                 <ul className="navbar-list">
                     {sections.map((section) => (
-                        <li key={section.id} className="navbar-item">
-                            <a href={`#${section.id}`} className="navbar-link">
-                                {section.label}
-                            </a>
+                        <li key={section.id} className={`navbar-item ${activeSection === section.id ? 'active' : ''}`} onClick={() => setActiveSection(section.id)}>
+                            {section.label}
                         </li>
                     ))}
                 </ul>
