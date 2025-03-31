@@ -4,11 +4,13 @@ import { gql } from '@apollo/client';
 const GET_MENU = gql`
   query {
   menu(id: "7") {
+    id
     label
     state
     startDate
     endDate
   	sections {
+      id
       label 
       items {
         id
@@ -24,13 +26,13 @@ const GET_MENU = gql`
 `;
 
 export const useMenuData = () => {
-    const { loading, error, data } = useQuery(GET_MENU);
+  const { loading, error, data } = useQuery(GET_MENU);
 
-    console.log('GraphQL Query Results:', {
-        loading,
-        error,
-        data
-    });
+  console.log('GraphQL Query Results:', {
+    loading,
+    error,
+    data
+  });
 
-    return { loading, error, data };
+  return { loading, error, data };
 };

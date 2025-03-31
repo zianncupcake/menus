@@ -1,0 +1,102 @@
+.layout-container {
+    display: flex;
+    flex-direction: column; 
+    /* Default to column for small screens */
+  }
+  
+  .header {
+    display: flex;
+    flex-direction: column;
+    /* background-color: #f0f0f0; */
+    padding: 16px;
+    /* align-items: center; */
+  }
+  
+  .header-title {
+    font-weight: bold;
+    text-align: center;
+  }
+  
+  .header-nav {
+    display: flex;
+    overflow-x: auto; /* Horizontal scrolling */
+  }
+  
+  .header-link {
+    margin-right: 16px;
+    color: #007bff; /* Blue color */
+  }
+  
+  /* Navigation for large screens */
+  .navbar {
+    display: none; /* Hidden by default */
+  }
+  
+  .navbar-title {
+    font-weight: bold;
+    margin-bottom: 8px;
+  }
+  
+  .navbar-list {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .navbar-item {
+    margin-bottom: 8px;
+  }
+  
+  .navbar-link {
+    color: #007bff; /* Blue color */
+  }
+  
+  /* Items display */
+  .items-display {
+    padding: 16px;
+  }
+  
+  .items-title {
+    font-weight: bold;
+  }
+  
+  /* Items list */
+  .items-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Responsive grid */
+    gap: 16px; /* Space between items */
+  }
+  
+  /* Item card styles */
+  .item-card {
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+  }
+  
+  /* Media query for large screens */
+  @media (min-width: 1024px) {
+    .layout-container {
+      flex-direction: row; /* Change to row for large screens */
+    }
+  
+    .header {
+      display: none; /* Hide header on large screens */
+    }
+  
+    .navbar {
+      display: none; /* Hidden by default */
+      width: 400px; /* Fixed width for the navbar */
+      /* background-color: #706969; Optional: Set background color */
+      padding: 32px; /* Optional: Add padding */
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+    }
+  
+    .items-display {
+      width: 75%; /* Optional: Set width for items display */
+      padding-left: 16px;
+    }
+  }
+  
