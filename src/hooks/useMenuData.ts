@@ -28,12 +28,5 @@ const GET_MENU = gql`
 
 export const useMenuData = () => {
   const { loading, error, data } = useQuery(GET_MENU);
-
-  console.log('GraphQL Query Results:', {
-    loading,
-    error,
-    data
-  });
-
   return { loading, error, data };
 };

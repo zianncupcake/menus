@@ -43,9 +43,6 @@ export const ItemCard: React.FC<ItemCardProps> = ({ item, unavailable }) => {
         }
     };
 
-    console.log('Loading:', loading);
-    console.log('Error:', error);
-    console.log('Data:', data);
     return (
         <>
             <div className={`item-card ${dummyDisabled ? 'item-disabled' : ''}`} onClick={() => openModal()}>
@@ -88,11 +85,12 @@ export const ItemCard: React.FC<ItemCardProps> = ({ item, unavailable }) => {
                                 ×
                             </button>
                             {loading ? (
-                                <div className="modal-loading">
-                                    Loading item details...
+                                <div className="modal-loading-container">
+                                    <div className="modal-loading-spinner"></div>
+                                    <div className="loading-text">Loading Item...</div>
                                 </div>
                             ) : error ? (
-                                <div className="modal-error">
+                                <div className="modal-loading-container">
                                     Failed to load item
                                 </div>
                             ) : (

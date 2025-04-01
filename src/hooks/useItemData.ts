@@ -33,12 +33,5 @@ query GetItem($id: ID!){
 
 export const useItemData = () => {
   const [getItem, { loading, error, data }] = useLazyQuery(GET_ITEM, { fetchPolicy: "cache-first" });
-
-  console.log('GraphQL Item Query Results:', {
-    loading,
-    error,
-    data
-  });
-
   return { getItem, loading, error, data };
 };
