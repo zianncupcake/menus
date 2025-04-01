@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './Menu.css';
 import { Link } from 'react-scroll';
+import { ItemCard } from './ItemCard';
 
 interface Section {
     id: string;
@@ -9,10 +10,10 @@ interface Section {
     items: Item[];
 }
 
-interface Item {
+export interface Item {
     id: string;
     type: string;
-    name: string;
+    label: string;
     description: string;
     price: number;
 }
@@ -22,7 +23,6 @@ interface MenuProps {
 }
 
 const Menu: React.FC<MenuProps> = ({ sections }) => {
-    console.log("What are my sections", sections)
     const [activeSection, setActiveSection] = useState<string | null>(null);
 
     useEffect(() => {
@@ -64,20 +64,14 @@ const Menu: React.FC<MenuProps> = ({ sections }) => {
                     <div
                         key={`section-${section.id}`}
                         id={`section-${section.id}`}
-                    // ref={(el) => {
-                    //     sectionRefs.current[section.id] = el;
-                    // }}
+                        className={section.id === "10" ? "section-disabled" : ""}
                     >
                         <h2 className="section-title">{section.label}</h2>
+                        {section.id === "10" && <p className="section-disabled-text">Only available on Mondays and Tuesdays.</p>}
                         <p className="section-description">{section.description}</p>
-                        <p>my id is section-{section.id}</p>
                         <div className="items-list">
                             {section.items.map((item) => (
-                                <div key={item.id} className="item-card">
-                                    <h3 className="item-name">{item.name}</h3>
-                                    <p className="item-description">{item.description}</p>
-                                    <span className="item-price">${item.price.toFixed(2)}</span>
-                                </div>
+                                <ItemCard key={item.id} item={item} unavailable={section.id === "10"} />
                             ))}
                         </div>
                     </div>
