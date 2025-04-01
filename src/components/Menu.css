@@ -22,36 +22,36 @@
   
   .header-item {
     cursor: pointer;
-    padding: 8px;      
+    padding: 8px;
+    color: black !important      
   }
 
   .header-item.active {
     border-bottom: 2px solid #5A189A; 
-    color: #5A189A; 
+    color: #5A189A !important; 
     font-weight: bold;
   }
   
   .navbar {
     display: none;
   }
-    
-  /* Items display */
+  
   .items-display {
     padding: 16px;
+    flex-grow: 1; 
+
   }
   
   .items-title {
     font-weight: bold;
   }
   
-  /* Items list */
   .items-list {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Responsive grid */
-    gap: 16px; /* Space between items */
+    /* display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); 
+    gap: 16px; */
   }
   
-  /* Item card styles */
   .item-card {
     border: 1px solid #ccc;
     padding: 10px;
@@ -59,10 +59,9 @@
     background-color: #f9f9f9;
   }
   
-  /* Media query for large screens */
   @media (min-width: 1024px) {
     .layout-container {
-      flex-direction: row; /* Change to row for large screens */
+      flex-direction: row; 
     }
   
     .header {
@@ -70,39 +69,40 @@
     }
   
     .navbar {
-      display: none; /* Hidden by default */
-      width: 400px; /* Fixed width for the navbar */
-      padding: 32px; /* Optional: Add padding */
+      width: 300px; 
+      padding: 32px; 
       display: flex;
       flex-direction: column;
-      height: 100vh;
+      position: sticky;
+      top: 0;
+      height: 100%;
     }
 
     .navbar-title {
       font-weight: bold;
-      margin-bottom: 8px;
     }
     
     .navbar-list {
-      list-style: none;
-      padding: 0;
+      display: flex;
+      flex-direction: column;
     }
     
     .navbar-item {
       cursor: pointer;
       border-left: 2px solid lightgray;
-      padding: 8px;      
+      padding: 8px; 
+      color: black !important        
     }
 
     .navbar-item.active {
       border-left: 2px solid #5A189A; 
-      color: #5A189A; 
+      color: #5A189A !important; 
       font-weight: bold;
     }
   
-    .items-display {
-      width: 75%; /* Optional: Set width for items display */
+    /* .items-display {
+      width: 75%; 
       padding-left: 16px;
-    }
+    } */
   }
   
