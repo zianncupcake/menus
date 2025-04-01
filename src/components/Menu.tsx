@@ -64,14 +64,14 @@ const Menu: React.FC<MenuProps> = ({ sections }) => {
                     <div
                         key={`section-${section.id}`}
                         id={`section-${section.id}`}
-                        className={section.id === "10" ? "section-disabled" : ""}
+                        className={section.id === "12" ? "section-disabled" : ""}
                     >
                         <h2 className="section-title">{section.label}</h2>
-                        {section.id === "10" && <p className="section-disabled-text">Only available on Mondays and Tuesdays.</p>}
+                        {section.id === "12" && <p className="section-disabled-text">Only available on Mondays and Tuesdays.</p>}
                         <p className="section-description">{section.description}</p>
                         <div className="items-list">
                             {section.items.map((item) => (
-                                <ItemCard key={item.id} item={item} unavailable={section.id === "10"} />
+                                <ItemCard key={item.id} item={item} unavailable={section.id === "12"} />
                             ))}
                         </div>
                     </div>

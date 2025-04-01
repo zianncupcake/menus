@@ -32,6 +32,7 @@
   box-shadow: 0 8px 16px rgba(90, 24, 154, 0.2);
   transform: translateY(-2px); 
 }
+
 .item-description {
   display: -webkit-box;
   -webkit-line-clamp: 2; 
@@ -57,7 +58,7 @@
 }
 
 .add-button:not(:disabled):hover {
-  background-color: #5A189A;
+  background-color: #9C4DF4;
   color: white;
 }
 
@@ -102,7 +103,6 @@
     align-items: center;
     justify-content: center;
     color: #5A189A;
-    border: none;
     border-radius: 50%;
     cursor: pointer;
     transition: all 0.2s ease;
@@ -112,6 +112,8 @@
   
   .modal-close:hover {
     background: #E6D4F0;
+    opacity: 0.6;
+    border:1px solid #5A189A;
     transform: scale(1.1);
   }
 
@@ -201,15 +203,16 @@
 }
 
 .modal-add-button {
-  background-color: #5A189A;
-  color: white;
-  padding: 0.75rem 1.5rem;
+  flex-grow: 1;
+  padding: 10px;
+  background: #E6D4F0;
   border: none;
-  border-radius: 4px;
   cursor: pointer;
-  transition: background-color 0.2s;
+  outline: none !important;
+  box-shadow: none !important;
 }
 
 .modal-add-button:hover {
-  background-color: #7B2CBF;
+  background-color: #9C4DF4;
+  color: white;
 }

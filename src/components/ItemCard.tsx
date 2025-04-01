@@ -13,8 +13,28 @@ interface ItemCardProps {
 
 export const ItemCard: React.FC<ItemCardProps> = ({ item, unavailable }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [additionalPrice, setAdditionalPrice] = useState(0);
+    const [quantity, setQuantity] = useState(1);
     const { getItem, loading, error, data } = useItemData();
-    const dummyDisabled = item.id == "46"
+    const dummyDisabled = item.id == "60"
+
+    const addToCart = () => {
+        setQuantity(1);
+        setAdditionalPrice(0);
+        setIsModalOpen(false)
+    };
+
+    const handleDecrement = () => {
+        if (quantity > 1) {
+            setQuantity(quantity - 1);
+        }
+    };
+
+    const handleIncrement = () => {
+        setQuantity(quantity + 1);
+    };
+
+    const totalPrice = (item?.price + additionalPrice) * quantity;
 
     const openModal = () => {
         if (!dummyDisabled && !unavailable) {
@@ -35,7 +55,7 @@ export const ItemCard: React.FC<ItemCardProps> = ({ item, unavailable }) => {
                     />
                 </div>
                 <div>
-                    <h3>{item.label}</h3>
+                    <h3 className="item-description">{item.label}</h3>
                     <p className="item-description">{item.description}</p>
                     <div className="footer">
                         <div>${item.price.toFixed(2)}</div>
@@ -89,21 +109,35 @@ export const ItemCard: React.FC<ItemCardProps> = ({ item, unavailable }) => {
                                             <p>
                                                 {data?.item?.description}
                                             </p>
-                                            <ModifierSection modifierGroups={data?.item?.modifierGroups} />
+                                            <ModifierSection modifierGroups={data?.item?.modifierGroups} onTotalPriceChange={setAdditionalPrice} />
                                         </div>
 
                                         <div className="modal-footer">
-                                            <span className="modal-price">
-                                                ${data?.item?.price.toFixed(2)}
-                                            </span>
+                                            <div className="quantity-selector">
+                                                <button
+                                                    className="quantity-btn minus"
+                                                    onClick={handleDecrement}
+                                                    disabled={quantity <= 1}
+                                                >
+                                                    -
+                                                </button>
+                                                <span className="quantity-display">{quantity}</span>
+                                                <button
+                                                    className="quantity-btn plus"
+                                                    onClick={handleIncrement}
+                                                >
+                                                    +
+                                                </button>
+                                            </div>
                                             <button
                                                 className="modal-add-button"
-                                                onClick={() => setIsModalOpen(false)}
+                                                onClick={() => addToCart()}
                                             >
-                                                Add to Cart
+                                                Add (${totalPrice.toFixed(2)})
                                             </button>
                                         </div>
-                                    </div>                                </div>
+                                    </div>
+                                </div>
                             )}
                         </motion.div>
                     </motion.div>

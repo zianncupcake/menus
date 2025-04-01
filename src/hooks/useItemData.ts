@@ -14,6 +14,7 @@ query GetItem($id: ID!){
      selectionRequiredMax
      selectionRequiredMin
      modifiers {
+       id
        displayOrder
        defaultQuantity
        priceOverride

@@ -3,7 +3,7 @@ import { gql } from '@apollo/client';
 
 const GET_MENU = gql`
   query {
-  menu(id: "7") {
+  menu(id: "9") {
     id
     label
     state
