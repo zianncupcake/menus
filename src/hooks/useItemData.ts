@@ -6,6 +6,8 @@ query GetItem($id: ID!){
    id
    label
    type
+   price
+   description
    modifierGroups {
      id
      label
@@ -28,7 +30,7 @@ query GetItem($id: ID!){
 `;
 
 export const useItemData = () => {
-  const [fetchItem, { loading, error, data }] = useLazyQuery(GET_ITEM, { fetchPolicy: "cache-first" });
+  const [getItem, { loading, error, data }] = useLazyQuery(GET_ITEM, { fetchPolicy: "cache-first" });
 
   console.log('GraphQL Item Query Results:', {
     loading,
@@ -36,5 +38,5 @@ export const useItemData = () => {
     data
   });
 
-  return { fetchItem, loading, error, data };
+  return { getItem, loading, error, data };
 };
