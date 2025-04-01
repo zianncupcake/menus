@@ -6,5 +6,51 @@
   background-color: #E6D4F0; 
   font-family: 'Baloo 2', sans-serif;
   font-size: 1.2rem;
-  min-height: 200vh;
+  min-height: 300vh;
+}
+
+@media (min-width: 1024px) {
+  #root {
+    min-height: 200vh;
+  }
+}
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  gap: 16px;
+}
+
+.loading-spinner {
+  width: 30px;
+  height: 30px;
+  border: 5px solid #D8C0E8;
+  border-top: 5px solid #5A189A; 
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.loading-text {
+  font-size: 1.2rem;
+  color: #5A189A;
+  font-weight: 500;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.error {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  color: #ff4444;
+  font-size: 1.2rem;
+  font-weight: 500;
+  justify-content: center;
 }

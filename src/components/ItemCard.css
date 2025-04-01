@@ -216,3 +216,21 @@
   background-color: #9C4DF4;
   color: white;
 }
+
+.modal-loading-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    height: 100%; 
+  }
+  
+  .modal-loading-spinner {
+    width: 30px;
+    height: 30px;
+    border: 5px solid #E6D4F0;
+    border-top: 5px solid #5A189A; 
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }

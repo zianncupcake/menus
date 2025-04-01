@@ -32,7 +32,6 @@ const Menu: React.FC<MenuProps> = ({ sections }) => {
     }, [sections, activeSection]);
 
     const handleScrollToSection = (sectionId: string) => {
-        console.log("GG TO THIS SECTION", sectionId)
         setActiveSection(sectionId);
     };
 
@@ -50,12 +49,12 @@ const Menu: React.FC<MenuProps> = ({ sections }) => {
 
             {/* Navigation Bar for Large Screens */}
             <div className="navbar">
-                <h2 className="navbar-title">Our Menuuuu</h2>
-                <ul className="navbar-list">
+                <h2 className="navbar-title">Our Menu</h2>
+                <div className="navbar-list">
                     {sections.map((section) => (
                         <Link key={section.id} to={`section-${section.id}`} smooth={true} duration={300} className={`navbar-item ${activeSection === section.id ? 'active' : ''}`} onClick={() => handleScrollToSection(section.id)} >{section.label}</Link>
                     ))}
-                </ul>
+                </div>
             </div>
 
             {/* Items Display */}
