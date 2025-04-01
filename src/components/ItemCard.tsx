@@ -4,6 +4,7 @@ import { Item } from "./Menu";
 import "./ItemCard.css"
 import { useItemData } from '../hooks/useItemData';
 import { ModifierSection } from './ModifierSection';
+import placeholderImage from '../assets/placeholderImage.png'
 
 
 interface ItemCardProps {
@@ -48,7 +49,7 @@ export const ItemCard: React.FC<ItemCardProps> = ({ item, unavailable }) => {
             <div className={`item-card ${dummyDisabled ? 'item-disabled' : ''}`} onClick={() => openModal()}>
                 <div className="image-container">
                     <img
-                        src="src/assets/placeholderImage.png"
+                        src={placeholderImage}
                     />
                 </div>
                 <div>
@@ -97,7 +98,7 @@ export const ItemCard: React.FC<ItemCardProps> = ({ item, unavailable }) => {
                                 <div className="modal-layout">
                                     <div className="modal-image-container">
                                         <img
-                                            src={"src/assets/placeholderImage.png"}
+                                            src={placeholderImage}
                                             className="modal-image"
                                         />
                                     </div>

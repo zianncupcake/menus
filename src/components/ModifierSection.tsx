@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Item } from './Menu';
 import './ModifierSection.css'
+import placeholderImage from '../assets/placeholderImage.png'
 
 interface Modifier {
     id: string;
@@ -109,7 +110,7 @@ export const ModifierSection: React.FC<ModifierSectionProps> = ({ modifierGroups
 
                                         <div className="modifier-image-container">
                                             <img
-                                                src={"src/assets/placeholderImage.png"}
+                                                src={placeholderImage}
                                                 className="modifier-image"
                                                 alt={modifier.item?.label || "Modifier"}
                                             />
