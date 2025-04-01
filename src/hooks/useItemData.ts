@@ -19,6 +19,7 @@ query GetItem($id: ID!){
        priceOverride
        item {
          id
+         label
          type
          identifier
          price

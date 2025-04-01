@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Item } from "./Menu";
 import "./ItemCard.css"
 import { useItemData } from '../hooks/useItemData';
+import { ModifierSection } from './ModifierSection';
 
 
 interface ItemCardProps {
@@ -34,10 +35,10 @@ export const ItemCard: React.FC<ItemCardProps> = ({ item, unavailable }) => {
                     />
                 </div>
                 <div>
-                    <h3 className="menu-item-name">{item.label}</h3>
+                    <h3>{item.label}</h3>
                     <p className="item-description">{item.description}</p>
                     <div className="footer">
-                        <div className="menu-item-price">${item.price.toFixed(2)}</div>
+                        <div>${item.price.toFixed(2)}</div>
                         <button className="add-button" disabled={dummyDisabled || unavailable}>{dummyDisabled ? "Sold out" : unavailable ? "Unavailable" : "Add"}</button>
                     </div>
                 </div>
@@ -84,21 +85,11 @@ export const ItemCard: React.FC<ItemCardProps> = ({ item, unavailable }) => {
                                     </div>
                                     <div className="modal-text-content">
                                         <div className="text-content-scrollable">
-                                            <h3 className="modal-title">{data?.item?.label}</h3>
-                                            <p className="modal-description">
+                                            <h3>{data?.item?.label}</h3>
+                                            <p>
                                                 {data?.item?.description}
                                             </p>
-                                            <div>IEJURbNVIJUEbRIVU BIUWEBRVIUERB  RUBVWUEIRBV  RUVUBRV</div>
-                                            <div>IEJURbNVIJUEbRIVU BIUWEBRVIUERB  RUBVWUEIRBV  RUVUBRV</div>
-                                            <div>IEJURbNVIJUEbRIVU BIUWEBRVIUERB  RUBVWUEIRBV  RUVUBRV</div>
-                                            <div>IEJURbNVIJUEbRIVU BIUWEBRVIUERB  RUBVWUEIRBV  RUVUBRV</div>
-                                            <div>IEJURbNVIJUEbRIVU BIUWEBRVIUERB  RUBVWUEIRBV  RUVUBRV</div>
-                                            <div>IEJURbNVIJUEbRIVU BIUWEBRVIUERB  RUBVWUEIRBV  RUVUBRV</div>
-                                            <div>IEJURbNVIJUEbRIVU BIUWEBRVIUERB  RUBVWUEIRBV  RUVUBRV</div>
-                                            <div>IEJURbNVIJUEbRIVU BIUWEBRVIUERB  RUBVWUEIRBV  RUVUBRV</div>
-                                            <div>IEJURbNVIJUEbRIVU BIUWEBRVIUERB  RUBVWUEIRBV  RUVUBRV</div>
-                                            <div>IEJURbNVIJUEbRIVU BIUWEBRVIUERB  RUBVWUEIRBV  RUVUBRV</div>
-                                            <div>IEJURbNVIJUEbRIVU BIUWEBRVIUERB  RUBVWUEIRBV  RUVUBRV</div>
+                                            <ModifierSection modifierGroups={data?.item?.modifierGroups} />
                                         </div>
 
                                         <div className="modal-footer">
