@@ -24,6 +24,7 @@ interface MenuProps {
 
 const Menu: React.FC<MenuProps> = ({ sections }) => {
     const [activeSection, setActiveSection] = useState<string | null>(null);
+    const dummyDisabled = "10";
 
     useEffect(() => {
         if (sections.length > 0 && activeSection === null) {
@@ -63,14 +64,14 @@ const Menu: React.FC<MenuProps> = ({ sections }) => {
                     <div
                         key={`section-${section.id}`}
                         id={`section-${section.id}`}
-                        className={section.id === "12" ? "section-disabled" : ""}
+                        className={section.id === dummyDisabled ? "section-disabled" : ""}
                     >
                         <h2 className="section-title">{section.label}</h2>
-                        {section.id === "12" && <p className="section-disabled-text">Only available on Mondays and Tuesdays.</p>}
+                        {section.id === dummyDisabled && <p className="section-disabled-text">Only available on Mondays and Tuesdays.</p>}
                         <p className="section-description">{section.description}</p>
                         <div className="items-list">
                             {section.items.map((item) => (
-                                <ItemCard key={item.id} item={item} unavailable={section.id === "12"} />
+                                <ItemCard key={item.id} item={item} unavailable={section.id === dummyDisabled} />
                             ))}
                         </div>
                     </div>

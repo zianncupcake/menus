@@ -17,7 +17,7 @@ export const ItemCard: React.FC<ItemCardProps> = ({ item, unavailable }) => {
     const [additionalPrice, setAdditionalPrice] = useState(0);
     const [quantity, setQuantity] = useState(1);
     const { getItem, loading, error, data } = useItemData();
-    const dummyDisabled = item.id == "60"
+    const dummyDisabled = item.id == "600"
 
     const addToCart = () => {
         setQuantity(1);
