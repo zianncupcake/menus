@@ -4,7 +4,7 @@ import { Link } from 'react-scroll';
 import { ItemCard, ItemWithModifierGroups, ModifierQuantitiesState } from './ItemCard';
 import { CartButton } from './CartButton';
 import { motion, AnimatePresence } from 'framer-motion';
-import { CartSidebar } from './CartSideBar';
+import { CartSidebar } from './CartSidebar';
 
 interface Section {
     id: string;
