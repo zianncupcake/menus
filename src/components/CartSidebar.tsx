@@ -8,9 +8,9 @@ import { getSelectedModifierLabels } from '../helper';
 interface CartSidebarProps {
     isOpen: boolean;
     cartItems: CartItem[];
-    onRemoveItem: (item: CartItem) => void;
-    onUpdateQuantity: (item: CartItem, change: number) => void;
-    onEditItem: (item: CartItem) => void
+    onRemoveItem: (cartItemId: string) => void;
+    onUpdateQuantity: (cartItemId: string, change: number) => void;
+    onEditItem: (item: CartItem) => void;
 }
 
 const sidebarVariants = {
@@ -33,14 +33,12 @@ export const CartSidebar: React.FC<CartSidebarProps> = ({
     onUpdateQuantity,
     onEditItem
 }) => {
-    const [expandedModifiers, setExpandedModifiers] = useState<Record<number, boolean>>({});
+    const [expandedModifiers, setExpandedModifiers] = useState<Record<string, boolean>>({});
 
     const totalPrice = cartItems.reduce((sum, item) => sum + item.currentPrice, 0);
-    const toggleModifiers = (index: number) => {
-        setExpandedModifiers(prev => ({
-            ...prev,
-            [index]: !prev[index]
-        }));
+
+    const toggleModifiers = (id: string) => {
+        setExpandedModifiers(prev => ({ ...prev, [id]: !prev[id] }));
     };
 
     return (
@@ -60,21 +58,21 @@ export const CartSidebar: React.FC<CartSidebarProps> = ({
                     <p className="empty-cart-message">Your cart is empty</p>
                 ) : (
                     <ul>
-                        {cartItems.map((item, index) => {
+                        {cartItems.map((item) => {
                             const hasPotentialModifiers = item.baseItem.modifierGroups && item.baseItem.modifierGroups.length > 0;
                             const areModifiersSelected = Object.keys(item.selectedModifiers).length > 0;
-                            const isExpanded = !!expandedModifiers[index];
+                            const isExpanded = !!expandedModifiers[item.id];
                             const modifierLabels = getSelectedModifierLabels(item);
 
                             return (
-                                <li key={index} className="cart-item-layout">
+                                <li key={item.id} className="cart-item-layout">
                                     <div className="item-details">
                                         <div className="item-header-line">
                                             <span className="item-label">{item.baseItem.label}</span>
                                             {areModifiersSelected && (
                                                 <button
                                                     className="modifier-toggle"
-                                                    onClick={() => toggleModifiers(index)}
+                                                    onClick={() => toggleModifiers(item.id)}
                                                 >
                                                     <motion.div
                                                         animate={{ rotate: isExpanded ? 45 : 0 }}
@@ -106,16 +104,16 @@ export const CartSidebar: React.FC<CartSidebarProps> = ({
                                     <div className="item-actions">
                                         <div className="quantity-selector">
                                             {item.quantity === 1 ? (
-                                                <button className="quantity-btn minus" onClick={() => onRemoveItem(item)} aria-label={`Remove ${item.baseItem.label} from cart`}>
+                                                <button className="quantity-btn minus" onClick={() => onRemoveItem(item.id)} aria-label={`Remove ${item.baseItem.label} from cart`}>
                                                     <img src={trashImage} className="trash-icon-img" width="16" height="10" />
                                                 </button>
                                             ) : (
-                                                <button className="quantity-btn minus" onClick={() => onUpdateQuantity(item, -1)} aria-label={`Decrease quantity of ${item.baseItem.label}`}>
+                                                <button className="quantity-btn minus" onClick={() => onUpdateQuantity(item.id, -1)} aria-label={`Decrease quantity of ${item.baseItem.label}`}>
                                                     -
                                                 </button>
                                             )}
                                             <span className="quantity-display">{item.quantity}</span>
-                                            <button className="quantity-btn plus" onClick={() => onUpdateQuantity(item, 1)} aria-label={`Increase quantity of ${item.baseItem.label}`}>
+                                            <button className="quantity-btn plus" onClick={() => onUpdateQuantity(item.id, 1)} aria-label={`Increase quantity of ${item.baseItem.label}`}>
                                                 +
                                             </button>
                                         </div>

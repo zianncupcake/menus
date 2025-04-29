@@ -5,6 +5,7 @@ import { ItemCard, ItemWithModifierGroups, ModifierQuantitiesState } from './Ite
 import { CartButton } from './CartButton';
 import { motion, AnimatePresence } from 'framer-motion';
 import { CartSidebar } from './CartSidebar';
+import { EditItemCard } from './EditItemCard';
 
 interface Section {
     id: string;
@@ -26,6 +27,7 @@ interface MenuProps {
 }
 
 export interface CartItem {
+    id: string;
     baseItem: ItemWithModifierGroups;
     quantity: number;
     selectedModifiers: ModifierQuantitiesState;
@@ -36,6 +38,7 @@ const Menu: React.FC<MenuProps> = ({ sections }) => {
     const [activeSection, setActiveSection] = useState<string | null>(null);
     const [cartItems, setCartItems] = useState<CartItem[]>([]);
     const [isCartOpen, setIsCartOpen] = useState(false);
+    const [itemBeingEdited, setItemBeingEdited] = useState<CartItem | null>(null);
     const dummyDisabled = "10";
 
     useEffect(() => {
@@ -52,7 +55,12 @@ const Menu: React.FC<MenuProps> = ({ sections }) => {
 
     const handleCartIconClick = () => {
         setIsCartOpen(prev => !prev);
+        setItemBeingEdited(null);
     };
+
+    const closeEditModal = () => {
+        setItemBeingEdited(null);
+    }
 
     const closeCartSidebar = () => {
         setIsCartOpen(false);
@@ -63,7 +71,6 @@ const Menu: React.FC<MenuProps> = ({ sections }) => {
             const hasModifiers = Object.keys(newItem.selectedModifiers).length > 0;
 
             if (hasModifiers) {
-                console.log("Item has modifiers. Adding as a new cart line.");
                 return [...prevItems, newItem];
             } else {
                 const existingItemIndex = prevItems.findIndex(
@@ -73,7 +80,6 @@ const Menu: React.FC<MenuProps> = ({ sections }) => {
                 );
 
                 if (existingItemIndex > -1) {
-                    console.log(`Existing item without modifiers found at index ${existingItemIndex}. Updating quantity and price.`);
                     const updatedItems = [...prevItems];
                     const existingItem = updatedItems[existingItemIndex];
 
@@ -87,43 +93,51 @@ const Menu: React.FC<MenuProps> = ({ sections }) => {
                     updatedItems[existingItemIndex] = updatedCartItem;
                     return updatedItems;
                 } else {
-                    console.log("Adding item without modifiers as new line item.");
                     return [...prevItems, newItem];
                 }
             }
         });
     };
 
-    const handleRemoveCartItem = (itemToRemove: CartItem) => {
-        setCartItems(prevItems => prevItems.filter(item => item !== itemToRemove));
+    const handleRemoveCartItem = (cartItemIdToRemove: string) => {
+        setCartItems(prevItems => prevItems.filter(item => item.id !== cartItemIdToRemove));
     };
 
-    const handleUpdateCartQuantity = (itemToUpdate: CartItem, change: number) => {
+    const handleUpdateCartQuantity = (cartItemIdToUpdate: string, change: number) => {
         setCartItems(prevItems => {
-            const newQuantity = itemToUpdate.quantity + change;
+            const itemIndex = prevItems.findIndex(item => item.id === cartItemIdToUpdate);
+            if (itemIndex === -1) return prevItems;
+
+            const currentItem = prevItems[itemIndex];
+            const newQuantity = currentItem.quantity + change;
 
             if (newQuantity <= 0) {
-                return prevItems.filter(item => item !== itemToUpdate);
+                return prevItems.filter(item => item.id !== cartItemIdToUpdate);
             } else {
-                return prevItems.map(item => {
-                    if (item === itemToUpdate) {
-                        const unitPrice = item.currentPrice / item.quantity;
-                        return {
-                            ...item,
-                            quantity: newQuantity,
-                            currentPrice: unitPrice * newQuantity
-                        };
-                    }
-                    return item;
-                });
+                const updatedItems = [...prevItems];
+                const unitPrice = currentItem.currentPrice / currentItem.quantity;
+                updatedItems[itemIndex] = {
+                    ...currentItem,
+                    quantity: newQuantity,
+                    currentPrice: unitPrice * newQuantity
+                };
+                return updatedItems;
             }
         });
     };
 
     const handleEditCartItem = (cartItemToEdit: CartItem) => {
-        console.log("Edit item requested:", cartItemToEdit);
-        alert("Edit item functionality requires re-opening the item modal with current selections - implementation needed.");
-        closeCartSidebar();
+        setItemBeingEdited(cartItemToEdit);
+        setIsCartOpen(false);
+    };
+
+    const handleUpdateCartItem = (updatedCartItem: CartItem) => {
+        setCartItems(prevItems => prevItems.map(item =>
+            item.id === updatedCartItem.id
+                ? updatedCartItem
+                : item
+        ));
+        setItemBeingEdited(null);
     };
 
     return (
@@ -194,6 +208,17 @@ const Menu: React.FC<MenuProps> = ({ sections }) => {
                             onEditItem={handleEditCartItem}
                         />
                     </>
+                )}
+            </AnimatePresence>
+
+            <AnimatePresence>
+                {itemBeingEdited && (
+                    <EditItemCard
+                        key={itemBeingEdited.id}
+                        onClose={closeEditModal}
+                        cartItemToEdit={itemBeingEdited}
+                        onUpdateCartItem={handleUpdateCartItem}
+                    />
                 )}
             </AnimatePresence>
         </div>

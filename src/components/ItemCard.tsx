@@ -59,8 +59,10 @@ export const ItemCard: React.FC<ItemCardProps> = ({ item, unavailable, onAddToCa
         setAdditionalPrice(total);
 
     }, [modifierQuantities, data?.item?.modifierGroups]);
+
     const addToCart = () => {
         const newCartItem: CartItem = {
+            id: `${data.item.id}-${Date.now()}`,
             baseItem: data.item,
             quantity: quantity,
             selectedModifiers: modifierQuantities,
