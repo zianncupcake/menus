@@ -1,84 +1,61 @@
-import React, { useState, useEffect } from 'react';
-import { Item } from './Menu';
+import React from 'react';
 import './ModifierSection.css'
 import placeholderImage from '../assets/placeholderImage.png'
-
-interface Modifier {
-    id: string;
-    priceOverride: number;
-    item: Item
-}
-
-interface ModifierGroup {
-    id: string;
-    label: string;
-    selectionRequiredMin: number;
-    selectionRequiredMax: number;
-    modifiers: Modifier[];
-}
-
+import { ModifierGroup, ModifierQuantitiesState } from './ItemCard';
 interface ModifierSectionProps {
     modifierGroups: ModifierGroup[];
-    onTotalPriceChange?: (total: number) => void;
+    currentQuantities: ModifierQuantitiesState;
+    onQuantitiesChange: (newQuantities: ModifierQuantitiesState) => void;
 }
 
-export const ModifierSection: React.FC<ModifierSectionProps> = ({ modifierGroups, onTotalPriceChange }) => {
-    const [modifierQuantities, setModifierQuantities] = useState<Record<string, Record<string, number>>>({});
-
-    useEffect(() => {
-        if (onTotalPriceChange) {
-            let total = 0;
-            Object.entries(modifierQuantities).forEach(([groupId, modifiers]) => {
-                Object.entries(modifiers).forEach(([modifierId, quantity]) => {
-                    const modifier = modifierGroups
-                        .find(g => g.id === groupId)
-                        ?.modifiers.find(m => m.id === modifierId);
-                    if (modifier) {
-                        total += modifier.priceOverride * quantity;
-                    }
-                });
-            });
-            onTotalPriceChange(total);
-        }
-    }, [modifierQuantities, modifierGroups, onTotalPriceChange]);
-
+export const ModifierSection: React.FC<ModifierSectionProps> = ({
+    modifierGroups,
+    currentQuantities,
+    onQuantitiesChange
+}) => {
     const handleIncrement = (groupId: string, modifierId: string) => {
-        setModifierQuantities(prev => {
-            const groupQuantities = prev[groupId] || {};
-            const currentQty = groupQuantities[modifierId] || 0;
-            const group = modifierGroups.find(g => g.id === groupId);
+        const prevQuantities = currentQuantities;
+        const groupQuantities = prevQuantities[groupId] || {};
+        const currentQty = groupQuantities[modifierId] || 0;
+        const group = modifierGroups.find(g => g.id === groupId);
 
-            const totalSelected = Object.values(groupQuantities).reduce((sum, qty) => sum + qty, 0);
+        const totalSelected = Object.values(groupQuantities).reduce((sum, qty) => sum + qty, 0);
+        const maxLimit = group?.selectionRequiredMax ?? Infinity;
 
-            if (totalSelected >= (group?.selectionRequiredMax || Infinity)) {
-                return prev;
+        if (totalSelected >= maxLimit) {
+            return;
+        }
+        const nextQuantities = {
+            ...prevQuantities,
+            [groupId]: {
+                ...groupQuantities,
+                [modifierId]: currentQty + 1
             }
-
-            return {
-                ...prev,
-                [groupId]: {
-                    ...groupQuantities,
-                    [modifierId]: currentQty + 1
-                }
-            };
-        });
+        };
+        onQuantitiesChange(nextQuantities);
     };
-
     const handleRemove = (groupId: string, modifierId: string) => {
-        setModifierQuantities(prev => {
-            const groupQuantities = { ...(prev[groupId] || {}) };
-            delete groupQuantities[modifierId];
-            return {
-                ...prev,
-                [groupId]: groupQuantities
-            };
-        });
+        const prevQuantities = currentQuantities;
+        const groupQuantities = { ...(prevQuantities[groupId] || {}) };
+
+        if (!Object.prototype.hasOwnProperty.call(groupQuantities, modifierId)) {
+            return;
+        }
+        delete groupQuantities[modifierId];
+        const nextQuantities = { ...prevQuantities };
+        if (Object.keys(groupQuantities).length === 0) {
+            delete nextQuantities[groupId];
+        } else {
+            nextQuantities[groupId] = groupQuantities;
+        }
+
+        onQuantitiesChange(nextQuantities);
     };
 
     return (
         <div className="modifier-section">
             {modifierGroups.map(group => {
-                const groupQuantities = modifierQuantities[group.id] || {};
+                const groupQuantities = currentQuantities[group.id] || {};
                 const totalSelected = Object.values(groupQuantities).reduce((sum, qty) => sum + qty, 0);
 
                 return (
