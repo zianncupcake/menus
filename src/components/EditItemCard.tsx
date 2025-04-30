@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { CartItem } from "./Menu";
 import { ModifierSection } from './ModifierSection';
 import placeholderImage from '../assets/placeholderImage.png';
 import "./ItemCard.css";
 import { ModifierGroup, ModifierQuantitiesState } from './ItemCard';
+import { findFirstFailingModifierGroup } from '../helper';
 
 interface EditItemCardProps {
     onClose: () => void;
@@ -20,6 +21,8 @@ export const EditItemCard: React.FC<EditItemCardProps> = ({
     const [quantity, setQuantity] = useState(1);
     const [modifierQuantities, setModifierQuantities] = useState<ModifierQuantitiesState>({});
     const [additionalPrice, setAdditionalPrice] = useState(0);
+    const [failingGroupId, setFailingGroupId] = useState<string | null>(null);
+    const scrollableContentRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         if (cartItemToEdit) {
@@ -30,6 +33,7 @@ export const EditItemCard: React.FC<EditItemCardProps> = ({
             setModifierQuantities({});
             setAdditionalPrice(0);
         }
+        setFailingGroupId(null);
     }, [cartItemToEdit]);
 
     useEffect(() => {
@@ -46,6 +50,25 @@ export const EditItemCard: React.FC<EditItemCardProps> = ({
         setAdditionalPrice(total);
     }, [modifierQuantities, cartItemToEdit]);
 
+    useEffect(() => {
+        if (failingGroupId && scrollableContentRef.current) {
+            const targetElementId = `mod-group-${failingGroupId}`;
+            try {
+                const targetElement = scrollableContentRef.current.querySelector(`#${targetElementId}`);
+
+                if (targetElement) {
+                    targetElement.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                } else {
+                    console.warn(`Could not find element with ID ${targetElementId} to scroll to.`);
+                }
+            } catch (e) {
+                console.error("Error finding or scrolling to element:", e);
+            }
+        }
+    }, [failingGroupId]);
 
     const handleDecrement = () => { setQuantity(prev => (prev > 1 ? prev - 1 : 1)); };
     const handleIncrement = () => { setQuantity(prev => prev + 1); };
@@ -55,6 +78,17 @@ export const EditItemCard: React.FC<EditItemCardProps> = ({
 
     const handleUpdate = () => {
         if (!cartItemToEdit) return;
+
+        setFailingGroupId(null);
+        const firstFailingGroup = findFirstFailingModifierGroup(
+            cartItemToEdit?.baseItem?.modifierGroups,
+            modifierQuantities
+        );
+
+        if (firstFailingGroup) {
+            setFailingGroupId(firstFailingGroup);
+            return;
+        }
 
         const updatedCartItem: CartItem = {
             id: cartItemToEdit.id,
@@ -84,13 +118,14 @@ export const EditItemCard: React.FC<EditItemCardProps> = ({
                             />
                         </div>
                         <div className="modal-text-content">
-                            <div className="text-content-scrollable">
+                            <div className="text-content-scrollable" ref={scrollableContentRef}>
                                 <h3>{displayItem.label}</h3>
                                 <p>{displayItem.description}</p>
                                 {displayItem.modifierGroups && displayItem.modifierGroups.length > 0 && (
                                     <ModifierSection
                                         modifierGroups={displayItem.modifierGroups}
                                         currentQuantities={modifierQuantities}
+                                        errorGroupId={failingGroupId}
                                         onQuantitiesChange={setModifierQuantities}
                                     />
                                 )}

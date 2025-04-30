@@ -5,12 +5,14 @@ import { ModifierGroup, ModifierQuantitiesState } from './ItemCard';
 interface ModifierSectionProps {
     modifierGroups: ModifierGroup[];
     currentQuantities: ModifierQuantitiesState;
+    errorGroupId: string | null;
     onQuantitiesChange: (newQuantities: ModifierQuantitiesState) => void;
 }
 
 export const ModifierSection: React.FC<ModifierSectionProps> = ({
     modifierGroups,
     currentQuantities,
+    errorGroupId,
     onQuantitiesChange
 }) => {
     const handleIncrement = (groupId: string, modifierId: string) => {
@@ -57,12 +59,13 @@ export const ModifierSection: React.FC<ModifierSectionProps> = ({
             {modifierGroups.map(group => {
                 const groupQuantities = currentQuantities[group.id] || {};
                 const totalSelected = Object.values(groupQuantities).reduce((sum, qty) => sum + qty, 0);
+                const hasError = group.id === errorGroupId;
 
                 return (
-                    <div key={group.id} className="modifier-group">
+                    <div key={group.id} id={`mod-group-${group.id}`} className="modifier-group">
                         <div className="group-header">
                             <span className="group-label">{group.label}</span>
-                            <span className="group-requirements">
+                            <span className={`group-requirements ${hasError ? 'error-highlight' : ''}`}>
                                 Select between {group.selectionRequiredMin} and {group.selectionRequiredMax} items
                                 ({totalSelected}/{group.selectionRequiredMax})
                             </span>

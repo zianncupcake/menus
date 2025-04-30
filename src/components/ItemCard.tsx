@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { CartItem, Item } from "./Menu";
 import "./ItemCard.css"
 import { useItemData } from '../hooks/useItemData';
 import { ModifierSection } from './ModifierSection';
 import placeholderImage from '../assets/placeholderImage.png'
+import { findFirstFailingModifierGroup } from '../helper';
 interface ItemCardProps {
     item: Item;
     unavailable: boolean;
@@ -34,8 +35,10 @@ export const ItemCard: React.FC<ItemCardProps> = ({ item, unavailable, onAddToCa
     const [additionalPrice, setAdditionalPrice] = useState(0);
     const [quantity, setQuantity] = useState(1);
     const [modifierQuantities, setModifierQuantities] = useState<ModifierQuantitiesState>({});
+    const [failingGroupId, setFailingGroupId] = useState<string | null>(null);
     const { getItem, loading, error, data } = useItemData();
     const dummyDisabled = item.id == "600"
+    const scrollableContentRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         let total = 0;
@@ -60,7 +63,38 @@ export const ItemCard: React.FC<ItemCardProps> = ({ item, unavailable, onAddToCa
 
     }, [modifierQuantities, data?.item?.modifierGroups]);
 
+    useEffect(() => {
+        if (failingGroupId && scrollableContentRef.current) {
+            const targetElementId = `mod-group-${failingGroupId}`;
+            try {
+                const targetElement = scrollableContentRef.current.querySelector(`#${targetElementId}`);
+
+                if (targetElement) {
+                    targetElement.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                } else {
+                    console.warn(`Could not find element with ID ${targetElementId} to scroll to.`);
+                }
+            } catch (e) {
+                console.error("Error finding or scrolling to element:", e);
+            }
+        }
+    }, [failingGroupId]);
+
     const addToCart = () => {
+        setFailingGroupId(null);
+        const firstFailingGroup = findFirstFailingModifierGroup(
+            data?.item?.modifierGroups,
+            modifierQuantities
+        );
+
+        if (firstFailingGroup) {
+            setFailingGroupId(firstFailingGroup);
+            return;
+        }
+
         const newCartItem: CartItem = {
             id: `${data.item.id}-${Date.now()}`,
             baseItem: data.item,
@@ -87,7 +121,7 @@ export const ItemCard: React.FC<ItemCardProps> = ({ item, unavailable, onAddToCa
         if (!dummyDisabled && !unavailable) {
             setQuantity(1);
             setModifierQuantities({});
-
+            setFailingGroupId(null);
             getItem({ variables: { id: item.id } });
             setIsModalOpen(true);
         }
@@ -156,12 +190,17 @@ export const ItemCard: React.FC<ItemCardProps> = ({ item, unavailable, onAddToCa
                                         />
                                     </div>
                                     <div className="modal-text-content">
-                                        <div className="text-content-scrollable">
+                                        <div className="text-content-scrollable" ref={scrollableContentRef}>
                                             <h3>{data?.item?.label}</h3>
                                             <p>
                                                 {data?.item?.description}
                                             </p>
-                                            <ModifierSection modifierGroups={data?.item?.modifierGroups} currentQuantities={modifierQuantities} onQuantitiesChange={setModifierQuantities} />
+                                            <ModifierSection
+                                                modifierGroups={data?.item?.modifierGroups}
+                                                currentQuantities={modifierQuantities}
+                                                errorGroupId={failingGroupId}
+                                                onQuantitiesChange={setModifierQuantities}
+                                            />
                                         </div>
 
                                         <div className="modal-footer">

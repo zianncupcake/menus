@@ -1,3 +1,4 @@
+import { ModifierGroup, ModifierQuantitiesState } from './components/ItemCard';
 import { CartItem } from './components/Menu';
 
 export const getSelectedModifierLabels = (item: CartItem): string[] => {
@@ -24,4 +25,29 @@ export const getSelectedModifierLabels = (item: CartItem): string[] => {
     });
 
     return labels;
+};
+
+export const findFirstFailingModifierGroup = (
+    modifierGroups: ModifierGroup[] | undefined | null,
+    selectedQuantities: ModifierQuantitiesState
+): string | null => {
+
+    if (!modifierGroups || modifierGroups.length === 0) {
+        return null;
+    }
+
+    for (const group of modifierGroups) {
+        const minRequired = group.selectionRequiredMin;
+
+        if (minRequired > 0) {
+            const selectionsInGroup = selectedQuantities[group.id] || {};
+            const totalSelectedInGroup = Object.values(selectionsInGroup).reduce((sum, qty) => sum + qty, 0);
+
+            if (totalSelectedInGroup < minRequired) {
+                return group.id;
+            }
+        }
+    }
+
+    return null;
 };
