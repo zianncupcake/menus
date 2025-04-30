@@ -112,7 +112,7 @@ export const EditItemCard: React.FC<EditItemCardProps> = ({
                                         +
                                     </button>
                                 </div>
-                                <button className="modal-add-button" onClick={handleUpdate} > Update Cart - ${totalPrice.toFixed(2)} </button>
+                                <button className="modal-add-button" onClick={handleUpdate} > Update (${totalPrice.toFixed(2)}) </button>
                             </div>
                         </div>
                     </div>
