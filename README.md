@@ -1,54 +1,27 @@
-# React + TypeScript + Vite
+# 🍽️ Full-stack Menu App 
+The app enables users to browse the menu and add customizable items to their cart.
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Frontend:
+- React with Typescript
+- Apollo Client
+- Vite
+- Packages: framer-motion, react-scroll
 
-Currently, two official plugins are available:
+[Backend](https://damp-eyrie-40872-66f66d973e5e.herokuapp.com/graphql) from [menus_backend repo](https://github.com/zianncupcake/menus_backend):
+- Ruby on rails
+- GraphQL
+- Postgres
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Demo
+Layout for larger screen sizes
 
-## Expanding the ESLint configuration
+https://github.com/user-attachments/assets/3a856741-846e-475f-b03e-c5e0327f0b34
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+Layout for smaller screen sizes
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+https://github.com/user-attachments/assets/e56d7784-3a9b-4092-8931-13e7bd247c6c
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Deployment
+Deployed on [Vercel](https://menus-jet.vercel.app/)
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
